@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "17466949-2a7c-4000-9b1f-e6846c906dc6",
+		"name": "Mircroservicio_documentacion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22955890",
+		"_collection_link": "https://www.postman.com/edwinalejo/workspace/microservicio-proyecto/collection/22955890-17466949-2a7c-4000-9b1f-e6846c906dc6?action=share&source=collection_link&creator=22955890"
+	},
+	"item": [
+		{
+			"name": "Crear Formato A",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f0b47cc-a8c1-4d90-838b-2cf509dd3e37"
+						},
+						{
+							"key": "tituloProyecto",
+							"value": "Sistema de Gestión de Proyectos de Grado",
+							"type": "text"
+						},
+						{
+							"key": "modalidad",
+							"value": "Investigación",
+							"type": "text"
+						},
+						{
+							"key": "objetivoGeneral",
+							"value": "Desarrollar una plataforma que administre los proyectos de grado\n",
+							"type": "text"
+						},
+						{
+							"key": "objetivosEspecificos",
+							"value": "Implementar el registro, gestión y seguimiento de proyectos",
+							"type": "text"
+						},
+						{
+							"key": "directorId",
+							"value": "p@unicauca.edu.co",
+							"type": "text"
+						},
+						{
+							"key": "codirectorId",
+							"value": "p@unicauca.edu.co",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "estudiante1Id",
+							"value": "s@unicauca.edu.co",
+							"type": "text"
+						},
+						{
+							"key": "estudiante2Id",
+							"value": "juan@unicauca.edu.co",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/documentos/formatoA",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"documentos",
+						"formatoA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear AnteProyecto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f0b507e-ed17-4bb0-894e-d8d015c56251"
+						},
+						{
+							"key": "directorId",
+							"value": "p@unicauca.edu.co",
+							"type": "text"
+						},
+						{
+							"key": "estudiante1Id",
+							"value": "juan@unicauca.edu.co",
+							"type": "text"
+						},
+						{
+							"key": "fechaAprobacionFormatoA",
+							"value": "2025-10-25",
+							"type": "text"
+						},
+						{
+							"key": "resumen",
+							"value": "Anteproyecto que busca optimizar la gestión de procesos académicos en línea",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/documentos/anteproyecto",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"documentos",
+						"anteproyecto"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

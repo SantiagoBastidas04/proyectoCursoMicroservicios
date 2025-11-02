@@ -5,8 +5,7 @@
 package co.unicauca.frontendapp.presentation;
 
 
-import co.unicauca.frontendapp.access.IUserRepositorio;
-import co.unicauca.frontendapp.access.UserRepositorio;
+import co.unicauca.frontendapp.access.Factory;
 import co.unicauca.frontendapp.entities.User;
 import co.unicauca.frontendapp.entities.enumRol;
 import co.unicauca.frontendapp.service.Service;
@@ -18,7 +17,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,8 +29,7 @@ import javax.swing.SwingConstants;
  * @author Acer
  */
 public class GuiLogin extends javax.swing.JFrame {
-    IUserRepositorio repo = new UserRepositorio();
-    Service service = new Service(repo);
+    Service service = new Service(Factory.getInstance().getUserRepository());
 
     
     //IEvaluacionFormatoRepositorio evaluacionFormatoRepository;

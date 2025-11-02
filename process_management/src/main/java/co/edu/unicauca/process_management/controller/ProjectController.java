@@ -3,6 +3,7 @@ package co.edu.unicauca.process_management.controller;
 
 
 import co.edu.unicauca.process_management.entity.ProjectModel;
+import co.edu.unicauca.process_management.entity.StatusEnum;
 import co.edu.unicauca.process_management.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,15 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/state/{estadoProyecto}")
+    public ResponseEntity<List<ProjectModel>> obtenerProyectosPorEstadoProyecto(@PathVariable StatusEnum estadoProyecto) {
+        try {
+            List<ProjectModel> projects = service.obtenerProyectosPorEstado(estadoProyecto);
+            return ResponseEntity.ok(projects);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/modality/{modality}")
     public ResponseEntity<List<ProjectModel>> listarPorModality(@PathVariable String modality) {
@@ -73,6 +83,10 @@ public class ProjectController {
     @PutMapping("/{id}/corregir")
     public ResponseEntity<ProjectModel> corregir(@PathVariable Long id) {
         return ResponseEntity.ok(service.corregirProyecto(id));
+    }
+    @PutMapping("/{id}/actualizar")
+    public ResponseEntity<ProjectModel> corregir(@PathVariable Long id, @RequestBody ProjectModel project) {
+        return ResponseEntity.ok(service.actualizarProyecto(id, project));
     }
 }
 

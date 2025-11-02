@@ -7,7 +7,8 @@ package co.edu.unicauca.process_management.entity;
  *
  */
 public enum StatusEnum {
-    
+
+
     FIRST("primera evaluacion formato A"),
     SECOND("segunda evaluacion formato A"),
     THIRD("tercera evaluacion formato A"),

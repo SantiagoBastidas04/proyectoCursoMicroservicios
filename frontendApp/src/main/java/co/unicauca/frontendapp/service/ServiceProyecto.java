@@ -20,10 +20,18 @@ public class ServiceProyecto {
     }
 
     public boolean registrarProyecto(ProjectModel proyecto) {
+        projectRepositorio.avanzarEstado(proyecto);
         return projectRepositorio.registrarProyecto(proyecto);
+        
     }
     
     public List<ProjectModel> listarPorEmailEstudiante(String emailEstudiante){
         return projectRepositorio.listarPorEmailEstudiante(emailEstudiante);
+    }
+    public List<ProjectModel> listarPendientes(){
+        return projectRepositorio.listarPendientes();
+    }
+    public boolean actualizarProyecto(ProjectModel proyecto){
+        return projectRepositorio.actualizarProyecto(proyecto);
     }
 }

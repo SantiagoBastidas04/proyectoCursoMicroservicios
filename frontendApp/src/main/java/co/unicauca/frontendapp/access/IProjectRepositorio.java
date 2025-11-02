@@ -15,7 +15,11 @@ public interface IProjectRepositorio {
     boolean registrarProyecto(ProjectModel proyecto);
     public List<ProjectModel> listarTodos();
     public ProjectModel buscarPorId(Long id);
-    public List<ProjectModel> listarPorEmail(String emailProfesor);
+    public List<ProjectModel> listarPorEmailProfesor(String emailProfesor);
     public List<ProjectModel> listarPendientes();
     public List<ProjectModel> listarPorEmailEstudiante(String emailEstudiante);
+    public boolean avanzarEstado(ProjectModel proyecto);
+    public boolean retrocederEstado(ProjectModel proyecto);
+    public boolean corregirEstado(ProjectModel proyecto);
+    public boolean actualizarProyecto(ProjectModel proyecto);
 }

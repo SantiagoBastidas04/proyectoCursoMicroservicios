@@ -106,6 +106,30 @@ public class ProjectService {
         return repository.save(actualizado);
     }
 
+    public ProjectModel actualizarProyecto(Long id, ProjectModel proyectoActualizado) {
+        Optional<ProjectModel> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            ProjectModel existente = optional.get();
+
+            existente.setAtrTitle(proyectoActualizado.getAtrTitle());
+            existente.setAtrDirectorEmail(proyectoActualizado.getAtrDirectorEmail());
+            existente.setAtrCodirectorEmail(proyectoActualizado.getAtrCodirectorEmail());
+            existente.setAtrStudent1Email(proyectoActualizado.getAtrStudent1Email());
+            existente.setAtrStudent2Email(proyectoActualizado.getAtrStudent2Email());
+            existente.setAtrModality(proyectoActualizado.getAtrModality());
+            existente.setAtrStatus(proyectoActualizado.getAtrStatus());
+            existente.setAtrNumberOfAttempts(proyectoActualizado.getAtrNumberOfAttempts());
+            existente.setAtrObservations(proyectoActualizado.getAtrObservations());
+            existente.setRutaFormatoA(proyectoActualizado.getRutaFormatoA());
+            existente.setRutaCartaAceptacion(proyectoActualizado.getRutaCartaAceptacion());
+            existente.setRutaAnteproyecto(proyectoActualizado.getRutaAnteproyecto());
+
+            return repository.save(existente);
+        } else {
+            throw new RuntimeException("Proyecto con ID " + id + " no encontrado");
+        }
+    }
+
     /**
      * Obtiene un proyecto por su ID
      */
@@ -142,6 +166,10 @@ public class ProjectService {
      * **/
     public List<ProjectModel> obtenerProyectosPorEstudiante(String emailEstudiante) {
         return repository.findByAtrStudent1Email(emailEstudiante);
+    }
+
+    public List<ProjectModel> obtenerProyectosPorEstado(StatusEnum estadoProyecto) {
+        return repository.findByAtrStatus(estadoProyecto);
     }
 
     /**

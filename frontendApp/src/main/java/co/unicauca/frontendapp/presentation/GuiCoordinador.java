@@ -4,6 +4,11 @@
  */
 package co.unicauca.frontendapp.presentation;
 
+import co.unicauca.frontendapp.access.Factory;
+import co.unicauca.frontendapp.access.ProjectRepositorio;
+import co.unicauca.frontendapp.entities.ProjectModel;
+import co.unicauca.frontendapp.entities.StatusEnum;
+import co.unicauca.frontendapp.service.ServiceProyecto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -13,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,20 +39,12 @@ public class GuiCoordinador extends javax.swing.JFrame {
 
     private static String rol;
     private static String email;
-    //private final serviceFormatoA service;
-    //private final ServiceEvaluacionFormato serviceEvaluacion;
-   // private static IFormatoRepositorio formatoRepositorio;
-    //private static IEvaluacionFormatoRepositorio evaluacionRepositorio;
+    private final ServiceProyecto service;
     private JTable tablaFormatos;
     private JButton btnEnviar;
 
     public GuiCoordinador(String rol, String Email) {
-
-        //formatoRepositorio = ServiceLocator.getInstance().getFormatoRepository();
-        //evaluacionRepositorio = ServiceLocator.getInstance().getEvaluacionRepository();
-
-        //this.service = new serviceFormatoA(formatoRepositorio);
-        //this.serviceEvaluacion = new ServiceEvaluacionFormato(evaluacionRepositorio);
+        this.service = new ServiceProyecto(Factory.getInstance().getProjectRepository());
 
         GuiCoordinador.rol = rol;
         GuiCoordinador.email = Email;
@@ -57,7 +55,7 @@ public class GuiCoordinador extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         initComponents(rol, email);
-        //cargarDatos();
+        cargarDatos();
     }
 
     private void initComponents(String rol, String email) {
@@ -95,23 +93,24 @@ public class GuiCoordinador extends javax.swing.JFrame {
         panelBoton.add(btnEnviar);
         add(panelBoton, BorderLayout.SOUTH);
 
-        //btnEnviar.addActionListener(e -> enviarEvaluaciones());
+       btnEnviar.addActionListener(e -> enviarEvaluaciones());
     }
-   /*
+   
     private void cargarDatos() {
-        List<FormatoA> formatos = service.listarPendientes();
-
+        List<ProjectModel> lista = new ArrayList<>();
+        lista = service.listarPendientes();
+           for (ProjectModel project : lista) {   //Bucle de prueba solamente para ver que es lo que llega a la lista.
+            System.out.println(project.toString());
+        }
         String[] columnas = {"Proyecto", "Estado", "Aprobar", "Rechazar", "Observaciones"};
-        Object[][] datos = new Object[formatos.size()][5];
+        Object[][] datos = new Object[lista.size()][5];
 
-        for (int i = 0; i < formatos.size(); i++) {
-            FormatoA f = formatos.get(i);
+        for (int i = 0; i < lista.size(); i++) {
+            ProjectModel f = lista.get(i);
             datos[i][0] = f;
-
-            long codigoFormato = f.getId();
-            var ultimaEval = serviceEvaluacion.obtenerUltima(codigoFormato);
-
-            datos[i][1] = ultimaEval != null ? ultimaEval.getEstado().name() : "Pendiente";
+            datos[i][1] = (f != null && f.getAtrStatus() != null)
+        ? f.getAtrStatus().getDisplayName()
+        : "Pendiente";
             datos[i][2] = Boolean.FALSE;
             datos[i][3] = Boolean.FALSE;
             datos[i][4] = "";
@@ -138,8 +137,8 @@ public class GuiCoordinador extends javax.swing.JFrame {
         tablaFormatos.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             protected void setValue(Object value) {
-                if (value instanceof FormatoA) {
-                    setText(((FormatoA) value).getTituloProyecto());
+                if (value instanceof ProjectModel) {
+                    setText(((ProjectModel) value).getAtrTitle());
                 } else {
                     super.setValue(value);
                 }
@@ -189,8 +188,8 @@ public class GuiCoordinador extends javax.swing.JFrame {
                 int fila = tablaFormatos.rowAtPoint(e.getPoint());
                 int columna = tablaFormatos.columnAtPoint(e.getPoint());
                 if (columna == 0) {
-                    FormatoA f = (FormatoA) modelo.getValueAt(fila, 0);
-                    abrirPDF(f.getFormatoPdf());
+                    ProjectModel f = (ProjectModel) modelo.getValueAt(fila, 0);
+                    abrirPDF(f.getRutaFormatoA());
                 }
             }
         });
@@ -210,44 +209,58 @@ public class GuiCoordinador extends javax.swing.JFrame {
     }
 
     private void enviarEvaluaciones() {
-        if (tablaFormatos.isEditing()) {
-            tablaFormatos.getCellEditor().stopCellEditing();
-        }
-        DefaultTableModel modelo = (DefaultTableModel) tablaFormatos.getModel();
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            FormatoA f = (FormatoA) modelo.getValueAt(i, 0);
-            Boolean aprobar = (Boolean) modelo.getValueAt(i, 2);
-            Boolean rechazar = (Boolean) modelo.getValueAt(i, 3);
-            String observaciones = (String) modelo.getValueAt(i, 4);
+    if (tablaFormatos.isEditing()) {
+        tablaFormatos.getCellEditor().stopCellEditing();
+    }
 
-            if (Boolean.TRUE.equals(aprobar) || Boolean.TRUE.equals(rechazar)) {
-                enumEstadoProyecto estado = Boolean.TRUE.equals(aprobar)
-                        ? enumEstadoProyecto.APROBADO
-                        : enumEstadoProyecto.RECHAZADO;
+    DefaultTableModel modelo = (DefaultTableModel) tablaFormatos.getModel();
+    boolean cambiosRealizados = false;
 
-                List<EvaluacionFormato> historial = serviceEvaluacion.obtenerHistorial(f.getId());
-                int intento = historial.size() + 1;
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        ProjectModel proyecto = (ProjectModel) modelo.getValueAt(i, 0);
+        Boolean aprobar = (Boolean) modelo.getValueAt(i, 2);
+        Boolean rechazar = (Boolean) modelo.getValueAt(i, 3);
+        String observaciones = (String) modelo.getValueAt(i, 4);
 
-                if (intento > 3 && estado == enumEstadoProyecto.RECHAZADO) {
-                    JOptionPane.showMessageDialog(this,
-                            "No se puede rechazar más de 3 veces. Proyecto rechazado definitivamente.");
-                    continue;
-                }
+        // Validar selección
+        if (Boolean.TRUE.equals(aprobar) || Boolean.TRUE.equals(rechazar)) {
+            StatusEnum nuevoEstado = Boolean.TRUE.equals(aprobar)
+                    ? StatusEnum.ACEPTADO_COMITE
+                    : StatusEnum.RECHAZADO_COMITE;
 
-                boolean ok = serviceEvaluacion.evaluarFormato(f, estado, observaciones);
+            // Incrementar el intento actual
+            int intentos = proyecto.getAtrNumberOfAttempts() != null ? proyecto.getAtrNumberOfAttempts() + 1 : 1;
+            proyecto.setAtrNumberOfAttempts(intentos);
 
-                if (ok) {
-                    modelo.setValueAt(estado.name(), i, 1);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "No se pudo registrar la evaluación para el proyecto: " + f.getTituloProyecto());
-                }
+            // Rechazo definitivo después de 3 intentos
+            if (intentos > 3 && nuevoEstado == StatusEnum.RECHAZADO_COMITE) {
+                JOptionPane.showMessageDialog(this,
+                        "El proyecto '" + proyecto.getAtrTitle() + "' ha sido rechazado definitivamente (más de 3 intentos).");
+                proyecto.setAtrStatus(StatusEnum.RECHAZADO_COMITE);
+            } else {
+                proyecto.setAtrStatus(nuevoEstado);
+            }
+
+            proyecto.setAtrObservations(observaciones);
+
+            // Llamada al servicio para actualizar
+            try {
+                service.actualizarProyecto(proyecto);
+                cambiosRealizados = true;
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al actualizar el proyecto '" + proyecto.getAtrTitle() + "': " + ex.getMessage());
             }
         }
+    }
 
+    if (cambiosRealizados) {
         JOptionPane.showMessageDialog(this, "Evaluaciones enviadas correctamente.");
         cargarDatos();
+    } else {
+        JOptionPane.showMessageDialog(this, "No se realizaron cambios.");
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -301,7 +314,6 @@ public class GuiCoordinador extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

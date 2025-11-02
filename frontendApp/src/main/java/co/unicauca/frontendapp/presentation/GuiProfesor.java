@@ -4,8 +4,7 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-import co.unicauca.frontendapp.access.IProjectRepositorio;
-import co.unicauca.frontendapp.access.ProjectRepositorio;
+import co.unicauca.frontendapp.access.Factory;
 import co.unicauca.frontendapp.entities.ModalityEnum;
 import co.unicauca.frontendapp.entities.ProjectModel;
 import co.unicauca.frontendapp.entities.StatusEnum;
@@ -26,9 +25,6 @@ import java.time.LocalDate;
 public class GuiProfesor extends javax.swing.JFrame {
     
     private final ServiceProyecto serviceProyecto;
-    //private final ServiceEvaluacionFormato serviceEvaluacion;
-    //private static IFormatoRepositorio  formatoRepositorio;
-    //private static IEvaluacionFormatoRepositorio formatoEvaluacionRepositorio;
     public static String email;
     public static String rol;
     
@@ -43,10 +39,7 @@ public class GuiProfesor extends javax.swing.JFrame {
     private JDateChooser dateChooser; 
    
     public GuiProfesor(String rol , String email) {
-        IProjectRepositorio projectRepositorio = new ProjectRepositorio();
-        //formatoEvaluacionRepositorio = ServiceLocator.getInstance().getEvaluacionRepository();
-        this.serviceProyecto = new ServiceProyecto(projectRepositorio); 
-        //this.serviceEvaluacion = new ServiceEvaluacionFormato(formatoEvaluacionRepositorio);
+        this.serviceProyecto = new ServiceProyecto(Factory.getInstance().getProjectRepository()); 
         init(rol,email);
     }
 

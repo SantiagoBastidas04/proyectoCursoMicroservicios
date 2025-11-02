@@ -4,7 +4,7 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-
+import co.unicauca.frontendapp.access.Factory;
 import co.unicauca.frontendapp.access.IProjectRepositorio;
 import co.unicauca.frontendapp.access.ProjectRepositorio;
 import co.unicauca.frontendapp.entities.ProjectModel;
@@ -23,13 +23,11 @@ import javax.swing.table.DefaultTableModel;
 public class GuiEstudiante extends JFrame {
 
     private JTable tablaFormatos;
-    private IProjectRepositorio projectRepository;
     private ServiceProyecto service;
     private static String email;
 
-    public GuiEstudiante( String emailEstudiante) {
-        this.projectRepository = new ProjectRepositorio();
-        this.service = new ServiceProyecto(projectRepository);
+    public GuiEstudiante(String emailEstudiante) {
+        this.service = new ServiceProyecto(Factory.getInstance().getProjectRepository());
         this.email = emailEstudiante;
 
         setTitle("Proyectos del Estudiante");
@@ -65,62 +63,57 @@ public class GuiEstudiante extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(tablaFormatos);
         add(scrollPane, BorderLayout.CENTER);
+        cargarDatos();
+     
+
+    }
+
+    private void cargarDatos() {
         List<ProjectModel> lista = new ArrayList<>();
         lista = service.listarPorEmailEstudiante(email);
-        for (ProjectModel project : lista) {
+           for (ProjectModel project : lista) {   //Bucle de prueba solamente para ver que es lo que llega a la lista.
             System.out.println(project.toString());
         }
-        
-    }
-    /*
-    private void cargarDatos() {
-    List<FormatoA> formatos = serviceFormatoA.listarPorEmailEstudiante(email);
-    
-    if (formatos.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No hay proyectos registrados para este estudiante.");
-    }
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay proyectos registrados para este estudiante.");
+        }
+        String[] columnas = {"Proyecto", "Modalidad", "Estado", "Observaciones"};
+        Object[][] datos = new Object[lista.size()][4];
 
-    String[] columnas = {"Proyecto", "Modalidad", "Estado", "Observaciones"};
-    Object[][] datos = new Object[formatos.size()][4];
-
-    for (int i = 0; i < formatos.size(); i++) {
-        FormatoA f = formatos.get(i);
-        System.out.println(">>> Proyecto: " + f.getTituloProyecto() + " - Modalidad: " + f.getModalidad());
-
-        List<EvaluacionFormato> evaluaciones = serviceEvaluacion.listarPorCodigoFormato(f.getId());
-
-        datos[i][0] = f.getTituloProyecto();
-        datos[i][1] = f.getModalidad();
-
-        if (evaluaciones == null || evaluaciones.isEmpty()) {
-            datos[i][2] = "Pendiente";
-            datos[i][3] = "En revisión";
-        } else {
-            EvaluacionFormato ultimaEval = evaluaciones.get(evaluaciones.size() - 1);
-            int intento = ultimaEval.getIntento();
+        for (int i = 0; i < lista.size(); i++) {
+            ProjectModel f = lista.get(i);
+            System.out.println(">>> Proyecto: " + f.getAtrTitle() + " - Modalidad: " + f.getAtrModality());
+            datos[i][0] = f.getAtrTitle();
+            datos[i][1] = f.getAtrModality();
+            int intento = f.getAtrNumberOfAttempts();
             String estadoRevision;
-
             switch (intento) {
-                case 1 -> estadoRevision = "Primera revisión";
-                case 2 -> estadoRevision = "Segunda revisión";
-                case 3 -> estadoRevision = "Tercera revisión";
-                default -> estadoRevision = "Revisión #" + intento;
+                case 1 ->
+                    estadoRevision = "Primera revisión";
+                case 2 ->
+                    estadoRevision = "Segunda revisión";
+                case 3 ->
+                    estadoRevision = "Tercera revisión";
+                default ->
+                    estadoRevision = "Revisión #" + intento;
             }
-
-            datos[i][2] = estadoRevision + " - " + ultimaEval.getEstado();
-            datos[i][3] = ultimaEval.getObservaciones();
+            datos[i][2] = estadoRevision + " - " + f.getAtrStatus().toString();
+            if (f.getAtrObservations() == null || f.getAtrObservations().isBlank()) {
+                datos[i][3] = "Sin observaciones";
+            } else {
+                datos[i][3] = f.getAtrObservations();
+            }
         }
+
+        DefaultTableModel modelo = new DefaultTableModel(datos, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tablaFormatos.setModel(modelo);
+        modelo.fireTableDataChanged();
     }
-
-    DefaultTableModel modelo = new DefaultTableModel(datos, columnas) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-    tablaFormatos.setModel(modelo);
-    modelo.fireTableDataChanged();
-}*/
 
     private void abrirPDF(String ruta) {
         try {
@@ -136,7 +129,7 @@ public class GuiEstudiante extends JFrame {
     }
 
 
-   /*
+    /*
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

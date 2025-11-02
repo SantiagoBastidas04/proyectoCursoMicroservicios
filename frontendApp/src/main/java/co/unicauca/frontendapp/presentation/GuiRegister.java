@@ -4,7 +4,7 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-import co.unicauca.frontendapp.access.UserRepositorio;
+import co.unicauca.frontendapp.access.Factory;
 import co.unicauca.frontendapp.entities.User;
 import co.unicauca.frontendapp.entities.enumPrograma;
 import co.unicauca.frontendapp.entities.enumRol;
@@ -18,15 +18,14 @@ import java.awt.*;
  * @author Acer
  */
 public class GuiRegister extends javax.swing.JFrame {
-    //BookingService bookingService = new BookingService(new BookingRepository() {});
-    Service service = new Service(new UserRepositorio() {});
+
+    Service service = new Service(Factory.getInstance().getUserRepository());
   
      static GuiLogin login;
 
      public GuiRegister() {
         login = new GuiLogin();
         initComponents(); 
-        //this.service = new Service(new UserRepositorio);
 
         setTitle("Registrar Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

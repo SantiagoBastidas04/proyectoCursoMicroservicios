@@ -138,6 +138,13 @@ public class ProjectService {
         return repository.findByAtrDirectorEmail(emailDirector);
     }
     /**
+     * Lista los proyectos por Estudiante
+     * **/
+    public List<ProjectModel> obtenerProyectosPorEstudiante(String emailEstudiante) {
+        return repository.findByAtrStudent1Email(emailEstudiante);
+    }
+
+    /**
      * Valida que el Usuario este creado
      * **/
     private void validarUsuarioExistente(String email) {

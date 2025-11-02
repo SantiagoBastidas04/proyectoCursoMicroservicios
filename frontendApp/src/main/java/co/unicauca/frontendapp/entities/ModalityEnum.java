@@ -4,11 +4,13 @@
  */
 package co.unicauca.frontendapp.entities;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Acer
  */
-public enum ModalityEnum {
+public enum ModalityEnum implements Serializable{
     RESEARCH("investigacion"),
     PROFESSIONAL("practica profesional");
 

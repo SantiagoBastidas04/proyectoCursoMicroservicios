@@ -37,6 +37,15 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/student/{correoEstudiante}")
+    public ResponseEntity<List<ProjectModel>> obtenerProyectosPorEstudiante(@PathVariable String correoEstudiante) {
+        try {
+            List<ProjectModel> projects = service.obtenerProyectosPorEstudiante(correoEstudiante);
+            return ResponseEntity.ok(projects);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/modality/{modality}")
     public ResponseEntity<List<ProjectModel>> listarPorModality(@PathVariable String modality) {
@@ -60,9 +69,6 @@ public class ProjectController {
     public ResponseEntity<ProjectModel> retroceder(@PathVariable Long id) {
         return ResponseEntity.ok(service.retrocederEstado(id));
     }
-
-
-
 
     @PutMapping("/{id}/corregir")
     public ResponseEntity<ProjectModel> corregir(@PathVariable Long id) {

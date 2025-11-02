@@ -6,6 +6,7 @@ package co.unicauca.frontendapp.service;
 
 import co.unicauca.frontendapp.access.IProjectRepositorio;
 import co.unicauca.frontendapp.entities.ProjectModel;
+import java.util.List;
 
 /**
  *
@@ -20,5 +21,9 @@ public class ServiceProyecto {
 
     public boolean registrarProyecto(ProjectModel proyecto) {
         return projectRepositorio.registrarProyecto(proyecto);
+    }
+    
+    public List<ProjectModel> listarPorEmailEstudiante(String emailEstudiante){
+        return projectRepositorio.listarPorEmailEstudiante(emailEstudiante);
     }
 }

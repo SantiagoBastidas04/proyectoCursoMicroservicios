@@ -25,7 +25,6 @@ public enum ModalityEnum {
      * 
      * @return El nombre
      */
-    @JsonValue
     public String getName()
     {
         return this.atrName;

@@ -357,7 +357,7 @@ layout.setVerticalGroup(
         Integer intentosIniciales = 0;
         String observaciones = null;
         String formatoPdf = txtFormatoPdf.getText().replace("\\", "/");
-        String cartaAceptacion = txtCartaAceptacion.getText();
+        String cartaAceptacion = txtCartaAceptacion.getText().replace("\\", "/");
         
         
         LocalDate fechaActual = fecha.toInstant()

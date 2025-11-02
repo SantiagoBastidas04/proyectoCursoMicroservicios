@@ -1,15 +1,22 @@
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\entities\enumPrograma.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\access\UserRepositorio.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\access\IUserRepositorio.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\utility\PasswordUtils.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiEstudiante.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\entities\Persona.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\service\Service.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\entities\User.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\utility\EmailValidator.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiCoordinador.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\FrontendApp.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\entities\enumRol.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiProfesor.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiRegister.java
-C:\Users\Acer\Documents\Sexto Semestre\Lab Ingenieria Software II\LabProyectoCurso-2\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiLogin.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\FrontendApp.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\access\IProjectRepositorio.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\ProjectModel.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\Persona.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\utility\PasswordUtils.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiCoordinador.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiActualizarFormatos.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiEstudiante.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiLogin.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiRegister.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\enumRol.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\service\Service.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\access\UserRepositorio.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\User.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\enumPrograma.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\StatusEnum.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\presentation\GuiProfesor.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\access\IUserRepositorio.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\utility\EmailValidator.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\access\ProjectRepositorio.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\service\ServiceProyecto.java
+C:\Users\juan\Desktop\trabajos ucau\6 semestre\ing soft 2\Entrega Segundo Corte\frontendApp\src\main\java\co\unicauca\frontendapp\entities\ModalityEnum.java

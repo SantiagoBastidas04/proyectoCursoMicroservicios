@@ -14,5 +14,6 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, Long>{
 
     List<ProjectModel> findByAtrModality(ModalityEnum modality);
     List<ProjectModel> findByAtrDirectorEmail(String atrDirectorEmail);
+    List<ProjectModel> findByAtrStudent1Email(String atrStudent1Email);
     Optional<ProjectModel> findByAtrDirectorEmailAndAtrStudent1Email(String atrDirectorEmail, String atrStudent1Email);
 }

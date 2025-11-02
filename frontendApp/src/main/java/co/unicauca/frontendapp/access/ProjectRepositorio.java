@@ -5,9 +5,14 @@
 package co.unicauca.frontendapp.access;
 
 import co.unicauca.frontendapp.entities.ProjectModel;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.net.http.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,8 +68,32 @@ public class ProjectRepositorio implements IProjectRepositorio {
 
     @Override
     public List<ProjectModel> listarPorEmailEstudiante(String emailEstudiante) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    List<ProjectModel> proyectos = new ArrayList<>();
+    try {
+        HttpRequest req = HttpRequest.newBuilder()
+                .uri(URI.create(BASE + "/student/" + emailEstudiante))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+
+        if (res.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            
+            proyectos = mapper.readValue(res.body(), new TypeReference<List<ProjectModel>>() {});
+           
+        } else {
+            System.err.println("Error al obtener proyectos: " + res.statusCode() + " - " + res.body());
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
     }
+
+    return proyectos; // si falla o el status != 200, devuelve lista vacía
+}
     
     // ----------------- Helpers -----------------
     private static String enc(String s) {
@@ -75,6 +104,7 @@ public class ProjectRepositorio implements IProjectRepositorio {
     StringBuilder sb = new StringBuilder("{");
     //sb.append(js("atrId", p.getAtrId() != null ? p.getAtrId().toString() : null)).append(",");
     sb.append(js("atrTitle", p.getAtrTitle())).append(",");
+    sb.append(js("rutaCartaAceptacion", p.getAtrCartaAceptacion())).append(",");
     sb.append(js("atrDirectorEmail", p.getAtrDirectorEmail())).append(",");
     sb.append(js("atrCodirectorEmail", p.getAtrCodirectorEmail())).append(",");
     sb.append(js("atrStudent1Email", p.getAtrStudent1Email())).append(",");

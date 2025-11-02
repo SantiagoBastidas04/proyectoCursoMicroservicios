@@ -4,11 +4,13 @@
  */
 package co.unicauca.frontendapp.entities;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Acer
  */
-public enum StatusEnum {
+public enum StatusEnum implements Serializable{
     FIRST("Primera Evaluación Formato A"),
     SECOND("Segunda Evaluación Formato A"),
     THIRD("Tercera Evaluación Formato A"),

@@ -5,12 +5,17 @@
 package co.unicauca.frontendapp.presentation;
 
 
+import co.unicauca.frontendapp.access.IProjectRepositorio;
+import co.unicauca.frontendapp.access.ProjectRepositorio;
+import co.unicauca.frontendapp.entities.ProjectModel;
+import co.unicauca.frontendapp.service.ServiceProyecto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,15 +23,13 @@ import javax.swing.table.DefaultTableModel;
 public class GuiEstudiante extends JFrame {
 
     private JTable tablaFormatos;
-    //private IEvaluacionFormatoRepositorio formatoRepositorio;
-    //private ServiceEvaluacionFormato serviceEvaluacion;
-    //private serviceFormatoA serviceFormatoA;
+    private IProjectRepositorio projectRepository;
+    private ServiceProyecto service;
     private static String email;
 
     public GuiEstudiante( String emailEstudiante) {
-        //this.serviceFormatoA = new serviceFormatoA(ServiceLocator.getInstance().getFormatoRepository());
-        //this.formatoRepositorio = ServiceLocator.getInstance().getEvaluacionRepository();
-        //this.serviceEvaluacion = new ServiceEvaluacionFormato(formatoRepositorio);
+        this.projectRepository = new ProjectRepositorio();
+        this.service = new ServiceProyecto(projectRepository);
         this.email = emailEstudiante;
 
         setTitle("Proyectos del Estudiante");
@@ -62,6 +65,12 @@ public class GuiEstudiante extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(tablaFormatos);
         add(scrollPane, BorderLayout.CENTER);
+        List<ProjectModel> lista = new ArrayList<>();
+        lista = service.listarPorEmailEstudiante(email);
+        for (ProjectModel project : lista) {
+            System.out.println(project.toString());
+        }
+        
     }
     /*
     private void cargarDatos() {

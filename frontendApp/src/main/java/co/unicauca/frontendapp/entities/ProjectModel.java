@@ -6,13 +6,14 @@ package co.unicauca.frontendapp.entities;
 
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 
 /**
  *
  * @author Juan Medina
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProjectModel {
+public class ProjectModel implements Serializable{
     private Long atrId;
 
     private String atrTitle;
@@ -31,6 +32,10 @@ public class ProjectModel {
     private String atrCartaAceptacion;
     private String rutaAnteproyecto;
 
+    public ProjectModel() {
+    }
+
+    
     public ProjectModel(Long atrId, String atrTitle, String atrDirectorEmail, String atrCodirectorEmail, String atrStudent1Email, String atrStudent2Email, ModalityEnum atrModality, LocalDate atrCreationDate, String atrGeneralObjective, String atrSpecificObjectives, StatusEnum atrStatus, Integer atrNumberOfAttempts, String atrObservations, String atrFileName, String atrCartaAceptacion, String rutaAnteproyecto) {
         this.atrId = atrId;
         this.atrTitle = atrTitle;
@@ -177,6 +182,11 @@ public class ProjectModel {
 
     public void setAtrCreationDate(LocalDate atrCreationDate) {
         this.atrCreationDate = atrCreationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectModel{" + "atrId=" + atrId + ", atrTitle=" + atrTitle + ", atrDirectorEmail=" + atrDirectorEmail + ", atrCodirectorEmail=" + atrCodirectorEmail + ", atrStudent1Email=" + atrStudent1Email + ", atrStudent2Email=" + atrStudent2Email + ", atrModality=" + atrModality + ", atrCreationDate=" + atrCreationDate + ", atrGeneralObjective=" + atrGeneralObjective + ", atrSpecificObjectives=" + atrSpecificObjectives + ", atrStatus=" + atrStatus + ", atrNumberOfAttempts=" + atrNumberOfAttempts + ", atrObservations=" + atrObservations + ", rutaFormatoA=" + rutaFormatoA + ", atrCartaAceptacion=" + atrCartaAceptacion + ", rutaAnteproyecto=" + rutaAnteproyecto + '}';
     }
     
     

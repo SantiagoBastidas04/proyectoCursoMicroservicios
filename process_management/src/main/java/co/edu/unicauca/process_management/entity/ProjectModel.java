@@ -47,6 +47,7 @@ public class ProjectModel  {
     private String atrObservations;
     private String rutaFormatoA;
     private String rutaAnteproyecto;
+    private String rutaCartaAceptacion;
 
 
     public StatusEnum getStatus()

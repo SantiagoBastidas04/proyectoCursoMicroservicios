@@ -56,6 +56,15 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/{correo}/{estadoProyecto}")
+    public ResponseEntity<List<ProjectModel>> obtenerProyectosPorEstadoProyectoConCorreo(@PathVariable StatusEnum estadoProyecto,@PathVariable String correo) {
+        try {
+            List<ProjectModel> projects = service.obtenerProyectosPorEstadoYCorreo(estadoProyecto,correo);
+            return ResponseEntity.ok(projects);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/modality/{modality}")
     public ResponseEntity<List<ProjectModel>> listarPorModality(@PathVariable String modality) {

@@ -85,10 +85,10 @@ public class GuiProfesor extends javax.swing.JFrame {
         comboMenu.addActionListener(e -> {
         String opcion = (String) comboMenu.getSelectedItem();
     if ("Ver Formatos Enviados".equals(opcion)) {
-        //new GuiFormatoEnviado(service, email).setVisible(true);
+        new GuiProyectoEnviado(serviceProyecto, email).setVisible(true);
     }
     if("Consultar/Actualizar Proyectos".equals(opcion)){
-        //new GuiActualizarFormatos(serviceEvaluacion,email).setVisible(true);
+        new GuiActualizarFormatos(serviceProyecto,email).setVisible(true);
     }
 });
 
@@ -346,7 +346,7 @@ layout.setVerticalGroup(
         String objetivoGeneral = txtObjetivoGeneral.getText();
         String objetivosEspecificos = txtObjetivosEspecificos.getText();
         java.util.Date fecha = dateChooser.getDate();
-        StatusEnum estado = StatusEnum.INICIO;
+        StatusEnum estado = StatusEnum.PRESENTADO_A_COORDINADOR;
         Integer intentosIniciales = 0;
         String observaciones = null;
         String formatoPdf = txtFormatoPdf.getText().replace("\\", "/");

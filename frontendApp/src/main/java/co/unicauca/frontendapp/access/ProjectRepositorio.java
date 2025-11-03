@@ -5,6 +5,7 @@
 package co.unicauca.frontendapp.access;
 
 import co.unicauca.frontendapp.entities.ProjectModel;
+import co.unicauca.frontendapp.entities.StatusEnum;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -56,10 +57,64 @@ public class ProjectRepositorio implements IProjectRepositorio {
     public ProjectModel buscarPorId(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    @Override
+    public List<ProjectModel> listarPorEstadoYCorreo(StatusEnum estado, String emailProfesor) {
+        List<ProjectModel> proyectos = new ArrayList<>();
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE + "/" + emailProfesor + "/" + estado.name()))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+                proyectos = mapper.readValue(res.body(), new TypeReference<List<ProjectModel>>() {
+                });
+
+            } else {
+                System.err.println("Error al obtener proyectos: " + res.statusCode() + " - " + res.body());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return proyectos; // si falla o el status != 200, devuelve lista vacía
+    }
 
     @Override
     public List<ProjectModel> listarPorEmailProfesor(String emailProfesor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<ProjectModel> proyectos = new ArrayList<>();
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE + "/director/" + emailProfesor))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+                proyectos = mapper.readValue(res.body(), new TypeReference<List<ProjectModel>>() {
+                });
+
+            } else {
+                System.err.println("Error al obtener proyectos: " + res.statusCode() + " - " + res.body());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return proyectos; // si falla o el status != 200, devuelve lista vacía
     }
     @Override
     public boolean actualizarProyecto(ProjectModel proyecto) {
@@ -166,7 +221,7 @@ public class ProjectRepositorio implements IProjectRepositorio {
         List<ProjectModel> proyectos = new ArrayList<>();
         try {
             HttpRequest req = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE + "/state/INICIO"))
+                    .uri(URI.create(BASE + "/state/PRESENTADO_A_COORDINADOR"))
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
@@ -255,5 +310,7 @@ public class ProjectRepositorio implements IProjectRepositorio {
     private static String quote(String s) {
         return "\"" + s.replace("\"", "\\\"") + "\"";
     }
+
+    
 
 }

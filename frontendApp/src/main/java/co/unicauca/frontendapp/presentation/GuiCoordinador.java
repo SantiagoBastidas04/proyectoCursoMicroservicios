@@ -5,7 +5,6 @@
 package co.unicauca.frontendapp.presentation;
 
 import co.unicauca.frontendapp.access.Factory;
-import co.unicauca.frontendapp.access.ProjectRepositorio;
 import co.unicauca.frontendapp.entities.ProjectModel;
 import co.unicauca.frontendapp.entities.StatusEnum;
 import co.unicauca.frontendapp.service.ServiceProyecto;
@@ -226,14 +225,14 @@ public class GuiCoordinador extends javax.swing.JFrame {
         if (Boolean.TRUE.equals(aprobar) || Boolean.TRUE.equals(rechazar)) {
             StatusEnum nuevoEstado = Boolean.TRUE.equals(aprobar)
                     ? StatusEnum.ACEPTADO_COMITE
-                    : StatusEnum.RECHAZADO_COMITE;
+                    : StatusEnum.CORRECCIONES_COMITE;
 
             // Incrementar el intento actual
             int intentos = proyecto.getAtrNumberOfAttempts() != null ? proyecto.getAtrNumberOfAttempts() + 1 : 1;
             proyecto.setAtrNumberOfAttempts(intentos);
 
             // Rechazo definitivo después de 3 intentos
-            if (intentos > 3 && nuevoEstado == StatusEnum.RECHAZADO_COMITE) {
+            if (intentos > 3 && nuevoEstado == StatusEnum.CORRECCIONES_COMITE) {
                 JOptionPane.showMessageDialog(this,
                         "El proyecto '" + proyecto.getAtrTitle() + "' ha sido rechazado definitivamente (más de 3 intentos).");
                 proyecto.setAtrStatus(StatusEnum.RECHAZADO_COMITE);

@@ -5,6 +5,7 @@
 package co.unicauca.frontendapp.access;
 
 import co.unicauca.frontendapp.entities.ProjectModel;
+import co.unicauca.frontendapp.entities.StatusEnum;
 import java.util.List;
 
 /**
@@ -22,4 +23,5 @@ public interface IProjectRepositorio {
     public boolean retrocederEstado(ProjectModel proyecto);
     public boolean corregirEstado(ProjectModel proyecto);
     public boolean actualizarProyecto(ProjectModel proyecto);
+    public List<ProjectModel> listarPorEstadoYCorreo(StatusEnum estado, String Correo);
 }

@@ -51,7 +51,6 @@ public class ProjectService {
         if(project.getAtrStudent2Email() != null){
             validarUsuarioExistente(project.getAtrStudent2Email());
         }
-        project.setAtrStatus(StatusEnum.INICIO);
         project.setAtrNumberOfAttempts(0);
         ProjectModel saved = repository.save(project);
         System.out.println("Proyecto creado en estado: " + saved.getAtrStatus());
@@ -171,7 +170,9 @@ public class ProjectService {
     public List<ProjectModel> obtenerProyectosPorEstado(StatusEnum estadoProyecto) {
         return repository.findByAtrStatus(estadoProyecto);
     }
-
+    public List<ProjectModel> obtenerProyectosPorEstadoYCorreo(StatusEnum estadoProyecto, String correo) {
+        return repository.findByAtrStatusAndAtrDirectorEmail(estadoProyecto,correo);
+    }
     /**
      * Valida que el Usuario este creado
      * **/

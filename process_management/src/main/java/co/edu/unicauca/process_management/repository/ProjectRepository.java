@@ -17,5 +17,6 @@ public interface ProjectRepository extends JpaRepository<ProjectModel, Long>{
     List<ProjectModel> findByAtrDirectorEmail(String atrDirectorEmail);
     List<ProjectModel> findByAtrStudent1Email(String atrStudent1Email);
     List<ProjectModel> findByAtrStatus(StatusEnum atrStatus);
+    List<ProjectModel>  findByAtrStatusAndAtrDirectorEmail(StatusEnum atrStatus, String atrDirectorEmail);
     Optional<ProjectModel> findByAtrDirectorEmailAndAtrStudent1Email(String atrDirectorEmail, String atrStudent1Email);
 }

@@ -4,9 +4,12 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-/*import co.unicauca.labtrabajogrado.access.ServiceLocator;
-import co.unicauca.labtrabajogrado.domain.EvaluacionFormato;
-import co.unicauca.labtrabajogrado.service.ServiceEvaluacionFormato;*/
+import co.unicauca.frontendapp.entities.ProjectModel;
+import co.unicauca.frontendapp.entities.StatusEnum;
+import co.unicauca.frontendapp.service.ServiceProyecto;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -19,19 +22,18 @@ import java.util.List;
  *
  * @author Acer
  */
-/*
 public class GuiActualizarFormatos extends javax.swing.JFrame {
-    
-    //private JTable tablaFormatos;
-    //private ServiceEvaluacionFormato service;
-   // private String emailProfesor;
-    //private List<EvaluacionFormato> formatos;
+
+    private JTable tablaFormatos;
+    private String emailProfesor;
+    private ServiceProyecto service;
+    private List<ProjectModel> formatos;
+
     /**
      * Creates new form GuiActualizarFormatos
      */
-    /*
-    
-     public GuiActualizarFormatos(ServiceEvaluacionFormato service, String emailProfesor) {
+
+    public GuiActualizarFormatos(ServiceProyecto service, String emailProfesor) {
         this.service = service;
         this.emailProfesor = emailProfesor;
 
@@ -43,7 +45,8 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
         initComponents();
         cargarDatos();
     }
-     private void initComponents() {
+
+    private void initComponents() {
         setLayout(new BorderLayout());
 
         // Encabezado
@@ -70,7 +73,7 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
 
     private void cargarDatos() {
         // trae los formatos asignados al profesor
-        formatos = service.listarFormatosRechazados(emailProfesor);
+        formatos = service.listarPorEstadoYCorreo(StatusEnum.CORRECCIONES_COMITE, emailProfesor);
 
         // Modelo personalizado con botón
         tablaFormatos.setModel(new AbstractTableModel() {
@@ -93,14 +96,20 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                EvaluacionFormato f = formatos.get(rowIndex);
+                ProjectModel f = formatos.get(rowIndex);
                 return switch (columnIndex) {
-                    case 0 -> f.getTituloProyecto();
-                    case 1 -> f.getModalidad();
-                    case 2 -> f.getEstado();
-                    case 3 -> f.getObservaciones();
-                    case 4 -> "Actualizar PDF"; // texto del botón
-                    default -> null;
+                    case 0 ->
+                        f.getAtrTitle();
+                    case 1 ->
+                        f.getAtrModality().getName();
+                    case 2 ->
+                        f.getAtrStatus().toString();
+                    case 3 ->
+                        f.getAtrObservations();
+                    case 4 ->
+                        "Actualizar PDF"; // texto del botón
+                    default ->
+                        null;
                 };
             }
 
@@ -121,11 +130,13 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
 
     // Renderer para mostrar un botón en la celda
     class ButtonRenderer extends JButton implements TableCellRenderer {
+
         public ButtonRenderer() {
             setOpaque(true);
         }
+
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+                boolean isSelected, boolean hasFocus, int row, int column) {
             setText((value == null) ? "" : value.toString());
             return this;
         }
@@ -133,6 +144,7 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
 
     // Editor que reacciona al clic en el botón
     class ButtonEditor extends DefaultCellEditor {
+
         private JButton button;
         private String label;
         private boolean clicked;
@@ -148,7 +160,7 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
+                boolean isSelected, int row, int column) {
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             clicked = true;
@@ -160,7 +172,7 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
         public Object getCellEditorValue() {
             if (clicked) {
                 // Acción al pulsar el botón
-                EvaluacionFormato formato = formatos.get(row);
+                ProjectModel formato = formatos.get(row);
                 actualizarPDF(formato);
             }
             clicked = false;
@@ -173,36 +185,66 @@ public class GuiActualizarFormatos extends javax.swing.JFrame {
             return super.stopCellEditing();
         }
 
-        private void actualizarPDF(EvaluacionFormato formato) {
+       private void actualizarPDF(ProjectModel formato) {
     JFileChooser chooser = new JFileChooser();
     chooser.setDialogTitle("Selecciona el nuevo PDF");
+    
+    // Filtrar solo archivos PDF
+    chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Archivos PDF", "pdf"));
+    
     int result = chooser.showOpenDialog(GuiActualizarFormatos.this);
     
-    if (result == JFileChooser.APPROVE_OPTION) {
-        File pdfFile = chooser.getSelectedFile();
-        service.actualizarFormatoPdf(formato.getCodigoFormato(), pdfFile.getAbsolutePath());
-        EvaluacionFormato actualizadoFormato = service.obtenerUltimaEvaluacion(formato.getCodigoFormato());
-
-        if (actualizadoFormato == null) {
-            JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
-                    "Este formato ha superado el límite de actualizaciones y fue eliminado.\nDebe iniciar un nuevo proceso.");
-        } else {
-            JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
-                    "Formato actualizado correctamente con: " + pdfFile.getName());
-        }
-        cargarDatos();
+    // Verificar si el usuario seleccionó un archivo
+    if (result != JFileChooser.APPROVE_OPTION) {
+        return; // El usuario canceló la operación
     }
+    
+    File pdfFile = chooser.getSelectedFile();
+    
+    // Validar que el archivo existe y es un PDF
+    if (pdfFile == null || !pdfFile.exists()) {
+        JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
+                "No se seleccionó un archivo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Verificar que sea un archivo PDF
+    if (!pdfFile.getName().toLowerCase().endsWith(".pdf")) {
+        JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
+                "Por favor selecciona un archivo PDF.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    boolean ok = false;
+    try {
+        formato.setRutaFormatoA(pdfFile.getAbsolutePath().replace("\\", "/"));
+        formato.setAtrStatus(StatusEnum.PRESENTADO_A_COORDINADOR);
+        ok = service.actualizarProyecto(formato);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
+                "Error al actualizar el formato: " + ex.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    if (!ok) {
+        JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
+                "Este formato ha superado el límite de actualizaciones y fue eliminado.\nDebe iniciar un nuevo proceso.");
+    } else {
+        JOptionPane.showMessageDialog(GuiActualizarFormatos.this,
+                "Formato actualizado correctamente con: " + pdfFile.getName());
+    }
+    cargarDatos();
 }
-    }
 
-    public static void main(String[] args) {
+
+public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ServiceEvaluacionFormato service = new ServiceEvaluacionFormato(ServiceLocator.getInstance().getEvaluacionRepository());
-            new GuiActualizarFormatos(service, "wpantoja@unicauca.edu.co").setVisible(true);
+            
         });
     }
 }
-    /*
+}/*
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

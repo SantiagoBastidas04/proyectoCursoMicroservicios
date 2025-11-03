@@ -14,4 +14,5 @@ public class FormatoA extends Documento{
     private String modalidad; // Investigación o Práctica profesional
     private String objetivoGeneral;
     private String objetivosEspecificos;
+    private  int numeroVersion = 1;
 }

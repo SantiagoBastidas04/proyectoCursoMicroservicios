@@ -1,6 +1,7 @@
 package co.edu.unicauca.document_management.service;
 
 import co.edu.unicauca.document_management.entity.Documento;
+import co.edu.unicauca.document_management.entity.FormatoA;
 import co.edu.unicauca.document_management.exception.CorreosIgualesException;
 import co.edu.unicauca.document_management.exception.UsuarioNoRegistradoException;
 import co.edu.unicauca.document_management.messaging.SubmissionPublisher;
@@ -50,7 +51,7 @@ public class DocumentoService implements IDocumentService  {
         if(documento.getEstudiante1Id()!=null &&
                 documento.getEstudiante2Id()!=null &&
                 documento.getEstudiante1Id().equalsIgnoreCase(documento.getEstudiante2Id())){
-            throw new CorreosIgualesException("Los estudiantes no pueden tenr el mimo email");
+            throw new CorreosIgualesException("Los estudiantes no pueden tener el mismo email");
         }
 
         validarUsuarioExistente(documento.getDirectorId());
@@ -65,6 +66,21 @@ public class DocumentoService implements IDocumentService  {
             if (!Files.exists(root)) {
                 Files.createDirectories(root);
             }
+            if (documento instanceof FormatoA formatoA){
+                List<FormatoA> versionesPrevias = repository.findByTituloProyectoAndEstudiante1Id(formatoA.getTituloProyecto(),formatoA.getEstudiante1Id());
+
+                if(!versionesPrevias.isEmpty()){
+                    int nuevaVersion = versionesPrevias.size() + 1;
+                    formatoA.setNumeroVersion(nuevaVersion);
+                    if (nuevaVersion > 3) {
+                        throw new RuntimeException("Se superó el número máximo de 3 correcciones del Formato A.");
+                    }
+                }else {
+                    formatoA.setNumeroVersion(1);
+                    formatoA.setTipo("FORMATO_A");
+                }
+            }
+
 
             String nombreArchivo = UUID.randomUUID() + "_" + archivo.getOriginalFilename();
             Path ruta = root.resolve(nombreArchivo);

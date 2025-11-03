@@ -80,7 +80,7 @@ public class GuiProfesor extends javax.swing.JFrame {
         lblMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblMenu.setFont(lblMenu.getFont().deriveFont(Font.BOLD, 16f));
 
-         String[] opciones = {"Seleccione", "Consultar/Actualizar Proyectos","Ver Formatos Enviados"};
+         String[] opciones = {"Seleccione", "Consultar/Actualizar Proyectos","Ver Formatos Enviados","Subir Anteproyecto"};
         JComboBox<String> comboMenu = new JComboBox<>(opciones);
         comboMenu.addActionListener(e -> {
         String opcion = (String) comboMenu.getSelectedItem();
@@ -89,6 +89,9 @@ public class GuiProfesor extends javax.swing.JFrame {
     }
     if("Consultar/Actualizar Proyectos".equals(opcion)){
         new GuiActualizarFormatos(serviceProyecto,email).setVisible(true);
+    }
+    if("Subir Anteproyecto".equals(opcion)){
+        new GuiEnviarAnteproyecto(serviceProyecto, email).setVisible(true);
     }
 });
 

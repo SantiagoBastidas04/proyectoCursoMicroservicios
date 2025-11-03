@@ -48,4 +48,7 @@ public class ServiceProyecto {
     public List<ProjectModel> listarPorEstadoYCorreo(StatusEnum estado, String emailProfesor){
         return projectRepositorio.listarPorEstadoYCorreo(estado,emailProfesor);
     }
+    public List<ProjectModel> listarPorEstado(StatusEnum estado){
+        return projectRepositorio.listarPorEstado(estado);
+    }
 }

@@ -47,7 +47,36 @@ public class ProjectRepositorio implements IProjectRepositorio {
             return false;
         }
     }
+    
+    @Override
+    public List<ProjectModel> listarPorEstado(StatusEnum estado) {
+        List<ProjectModel> proyectos = new ArrayList<>();
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE + "/state/" + estado.name()))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
 
+            HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+                proyectos = mapper.readValue(res.body(), new TypeReference<List<ProjectModel>>() {
+                });
+
+            } else {
+                System.err.println("Error al obtener proyectos: " + res.statusCode() + " - " + res.body());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return proyectos; // si falla o el status != 200, devuelve lista vacía
+    }
     @Override
     public List<ProjectModel> listarTodos() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

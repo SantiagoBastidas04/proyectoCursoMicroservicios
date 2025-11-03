@@ -22,6 +22,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue documentoUserQueue() {
+        return new Queue(DOCUMENT_USER_QUEUE, true);
+    }
+
+    @Bean
     public Queue notificationQueue() {
         return new Queue(NOTIFICATION_QUEUE, true);
     }

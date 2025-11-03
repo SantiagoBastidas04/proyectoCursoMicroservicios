@@ -15,6 +15,7 @@ import java.util.List;
 public interface IProjectRepositorio {
     boolean registrarProyecto(ProjectModel proyecto);
     public List<ProjectModel> listarTodos();
+    public List<ProjectModel> listarPorEstado(StatusEnum estado);
     public ProjectModel buscarPorId(Long id);
     public List<ProjectModel> listarPorEmailProfesor(String emailProfesor);
     public List<ProjectModel> listarPendientes();

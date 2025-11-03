@@ -16,6 +16,12 @@ public class RabbitConfig {
     public static final String DOCUMENT_QUEUE = "DocumentQueue";
 
     @Bean
+    public Queue documentQueue() {return new Queue(DOCUMENT_QUEUE, true);}
+
+    @Bean
+    public Queue processUserQueue() {return new Queue(PROCESS_USER_QUEUE, true);}
+
+    @Bean
     public Jackson2JsonMessageConverter jsonConverter() {
         return new Jackson2JsonMessageConverter();
     }

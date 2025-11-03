@@ -243,6 +243,8 @@ public class GuiLogin extends javax.swing.JFrame {
         }
         else if(newUser.getRol()==enumRol.Jefe_Departamento){
             JOptionPane.showMessageDialog(this, "Bienvenido Jefe de departamento de "+newUser.getPrograma());
+            GuiJefeDepartamento jefeDepartamento = new GuiJefeDepartamento(newUser.getRol().name(),newUser.getEmail());
+            jefeDepartamento.setVisible(true);
         }
     } else {
         JOptionPane.showMessageDialog(

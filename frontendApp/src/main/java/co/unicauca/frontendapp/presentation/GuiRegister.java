@@ -4,28 +4,37 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-import co.unicauca.frontendapp.access.Factory;
+import co.unicauca.frontendapp.access.UserRepositorio;
 import co.unicauca.frontendapp.entities.User;
 import co.unicauca.frontendapp.entities.enumPrograma;
 import co.unicauca.frontendapp.entities.enumRol;
+import co.unicauca.frontendapp.facade.AuthFacade;
+import co.unicauca.frontendapp.observer.AuthObserver;
 import co.unicauca.frontendapp.service.Service;
 import co.unicauca.frontendapp.utility.EmailValidator;
 import co.unicauca.frontendapp.utility.PasswordUtils;
 import javax.swing.*;
 import java.awt.*;
+
 /**
  *
  * @author Acer
  */
-public class GuiRegister extends javax.swing.JFrame {
+public class GuiRegister extends javax.swing.JFrame implements AuthObserver {
 
-    Service service = new Service(Factory.getInstance().getUserRepository());
-  
-     static GuiLogin login;
+    private final AuthFacade facade;
+    //BookingService bookingService = new BookingService(new BookingRepository() {});
+    Service service = new Service(new UserRepositorio() {
+    });
 
-     public GuiRegister() {
+    static GuiLogin login;
+
+    public GuiRegister() {
         login = new GuiLogin();
-        initComponents(); 
+        initComponents();
+        this.facade = new AuthFacade();
+        this.facade.addObserver(this);
+        //this.service = new Service(new UserRepositorio);
 
         setTitle("Registrar Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,8 +87,15 @@ public class GuiRegister extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
-     private void addRow(JPanel panel, GridBagConstraints gbc, int row,
-        Component label, JComponent field) {
+
+    @Override
+    public void dispose() {
+        this.facade.removeObserver(this);
+        super.dispose();
+    }
+
+    private void addRow(JPanel panel, GridBagConstraints gbc, int row,
+            Component label, JComponent field) {
         label.setFont(new Font("Segoe UI", Font.BOLD, 14));
         label.setForeground(new Color(60, 60, 60));
 
@@ -91,15 +107,17 @@ public class GuiRegister extends javax.swing.JFrame {
         gbc.gridx = 1;
         gbc.weightx = 0.7;
         panel.add(field, gbc);
-}
-     private void personalizarBoton(JButton boton, Color bgColor) {
+    }
+
+    private void personalizarBoton(JButton boton, Color bgColor) {
         boton.setBackground(bgColor);
         boton.setForeground(Color.WHITE);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-}
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -305,58 +323,104 @@ public class GuiRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        
+
         login.setVisible(true);
-        this.dispose(); 
+        this.dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseClicked
-                 try {
-        String nombres = txtNombres.getText();
-        String apellidos = txtApellidos.getText();
-        String celular = txtCelular.getText();
-        String seleccionadoPrograma = comboBoxPrograma.getSelectedItem().toString();
-        enumPrograma programa = enumPrograma.valueOf(seleccionadoPrograma);
-        // Convertir String a enumRol
-        String seleccionadoRol = comboBoxRol.getSelectedItem().toString();
-        enumRol rol = enumRol.valueOf(seleccionadoRol);  
-        String email = txtEmail.getText();
-        String contrasenia = new String(txtContrasenia.getPassword());
+        try {
+            String nombres = txtNombres.getText().trim();
+            String apellidos = txtApellidos.getText().trim();
+            String celular = txtCelular.getText().trim();
+            String seleccionadoPrograma = comboBoxPrograma.getSelectedItem().toString();
+            enumPrograma programa = enumPrograma.valueOf(seleccionadoPrograma);
+            String seleccionadoRol = comboBoxRol.getSelectedItem().toString();
+            enumRol rol = enumRol.valueOf(seleccionadoRol);
+            String email = txtEmail.getText().trim();
+            String contrasenia = new String(txtContrasenia.getPassword());
+            User nuevoUsuario = new User(nombres, apellidos, celular, programa, rol, email, contrasenia);
 
-        User nuevoUsuario = new User(nombres, apellidos, celular, programa, rol, email, contrasenia);
-        if (!EmailValidator.esCorreoInstitucional(nuevoUsuario.getEmail())) {
-            JOptionPane.showMessageDialog(this, 
-                "El dominio del correo debe ser @unicauca.edu.co");
-            return; // salir si no cumple
+            if (!EmailValidator.esCorreoInstitucional(nuevoUsuario.getEmail())) {
+                JOptionPane.showMessageDialog(this,
+                        "El dominio del correo debe ser @unicauca.edu.co",
+                        "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!PasswordUtils.validarContrasenia(nuevoUsuario.getContraseña())) {
+                JOptionPane.showMessageDialog(this,
+                        """
+        La contraseña debe cumplir con los siguientes requisitos:
+        - Al menos 6 caracteres
+        - Al menos una letra mayúscula
+        - Al menos un número
+        - Al menos un carácter especial (@#$%^&+=!¿?.,;:_-)
+        - No debe contener espacios
+        """,
+                        "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            btnRegistrar.setEnabled(false);
+
+            new javax.swing.SwingWorker<Boolean, Void>() {
+                @Override
+                protected Boolean doInBackground() {
+                    return facade.register(nuevoUsuario);
+                }
+
+                @Override
+                protected void done() {
+                    btnRegistrar.setEnabled(true);
+                    try {
+                        Boolean resultado = get();
+                        if (resultado != null && resultado) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Usuario registrado exitosamente",
+                                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                            // Limpiar todos los campos
+                            limpiarCampos();
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "No se pudo registrar el usuario",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null,
+                                "Error al procesar el registro: " + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }.execute();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Validar contraseña
-        if (!PasswordUtils.validarContrasenia(nuevoUsuario.getContraseña())) {
-            JOptionPane.showMessageDialog(this, 
-                "La contraseña debe cumplir con los siguientes requisitos:\n" +
-                "- Al menos 6 caracteres\n" +
-                "- Al menos una letra mayúscula\n" +
-                "- Al menos un número\n" +
-                "- Al menos un carácter especial (@#$%^&+=!¿?.,;:_-)\n" +
-                "- No debe contener espacios");
-            return; // salir si no cumple
-        }
-
-        boolean exito = service.registrarUsuario(nuevoUsuario);
-
-        if (exito) {
-            
-            JOptionPane.showMessageDialog(this, "Usuario registrado con éxito!");
-            login.setVisible(true);
-            this.dispose(); 
-        } else {
-            JOptionPane.showMessageDialog(this, "Error en el registro. Verifique los datos.");
-        }
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-    }
     }//GEN-LAST:event_btnRegistrarMouseClicked
+
+    private void limpiarCampos() {
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtCelular.setText("");
+        txtEmail.setText("");
+        txtContrasenia.setText("");
+
+        // Resetear los ComboBox al primer elemento
+        if (comboBoxPrograma.getItemCount() > 0) {
+            comboBoxPrograma.setSelectedIndex(0);
+        }
+
+        if (comboBoxRol.getItemCount() > 0) {
+            comboBoxRol.setSelectedIndex(0);
+        }
+
+        // Opcional: poner el foco en el primer campo
+        txtNombres.requestFocus();
+    }
 
     /**
      * @param args the command line arguments
@@ -383,6 +447,8 @@ public class GuiRegister extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GuiRegister.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -412,4 +478,22 @@ public class GuiRegister extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNombres;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void onUserRegistered(User user) {
+        javax.swing.SwingUtilities.invokeLater(()
+                -> javax.swing.JOptionPane.showMessageDialog(this,
+                        "¡Usuario registrado: " + user.getNombre() + "!",
+                        "Registro", javax.swing.JOptionPane.INFORMATION_MESSAGE)
+        );
+    }
+
+    @Override
+    public void onUserRegistrationFailed(String message) {
+        javax.swing.SwingUtilities.invokeLater(()
+                -> javax.swing.JOptionPane.showMessageDialog(this,
+                        "Registro fallido: " + message,
+                        "Registro", javax.swing.JOptionPane.WARNING_MESSAGE)
+        );
+    }
 }

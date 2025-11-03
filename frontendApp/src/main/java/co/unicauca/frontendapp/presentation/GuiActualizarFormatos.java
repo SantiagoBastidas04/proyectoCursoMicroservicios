@@ -4,9 +4,9 @@
  */
 package co.unicauca.frontendapp.presentation;
 
-import co.unicauca.labtrabajogrado.access.ServiceLocator;
+/*import co.unicauca.labtrabajogrado.access.ServiceLocator;
 import co.unicauca.labtrabajogrado.domain.EvaluacionFormato;
-import co.unicauca.labtrabajogrado.service.ServiceEvaluacionFormato;
+import co.unicauca.labtrabajogrado.service.ServiceEvaluacionFormato;*/
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -19,15 +19,18 @@ import java.util.List;
  *
  * @author Acer
  */
+/*
 public class GuiActualizarFormatos extends javax.swing.JFrame {
     
-    private JTable tablaFormatos;
-    private ServiceEvaluacionFormato service;
-    private String emailProfesor;
-    private List<EvaluacionFormato> formatos;
+    //private JTable tablaFormatos;
+    //private ServiceEvaluacionFormato service;
+   // private String emailProfesor;
+    //private List<EvaluacionFormato> formatos;
     /**
      * Creates new form GuiActualizarFormatos
      */
+    /*
+    
      public GuiActualizarFormatos(ServiceEvaluacionFormato service, String emailProfesor) {
         this.service = service;
         this.emailProfesor = emailProfesor;

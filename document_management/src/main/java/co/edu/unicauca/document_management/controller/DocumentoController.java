@@ -3,7 +3,9 @@ package co.edu.unicauca.document_management.controller;
 import co.edu.unicauca.document_management.entity.Anteproyecto;
 import co.edu.unicauca.document_management.entity.Documento;
 import co.edu.unicauca.document_management.entity.FormatoA;
+import co.edu.unicauca.document_management.service.AnteproyectoUploader;
 import co.edu.unicauca.document_management.service.DocumentoService;
+import co.edu.unicauca.document_management.service.FormatoAUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,9 @@ import java.util.List;
 @RequestMapping("/api/documentos")
 @RequiredArgsConstructor
 public class DocumentoController {
-    private final DocumentoService service;
+    private final FormatoAUploader formatoAUploader;
+    private final AnteproyectoUploader anteproyectoUploader;
+    private final DocumentoService documentoService;
 
     // === Subir Formato A ===
     @PostMapping("/formatoA")
@@ -43,7 +47,7 @@ public class DocumentoController {
         formatoA.setEstudiante1Id(estudiante1Id);
         formatoA.setEstudiante2Id(estudiante2Id);
 
-        Documento guardado = service.subirDocumento(archivo, formatoA);
+        Documento guardado = formatoAUploader.subirDocumento(archivo, formatoA);
         return ResponseEntity.ok(guardado);
     }
 
@@ -68,17 +72,17 @@ public class DocumentoController {
         anteproyecto.setFechaAprobacionFormatoA(fechaAprobacionFormatoA);
         anteproyecto.setResumen(resumen);
 
-        Documento guardado = service.subirDocumento(archivo, anteproyecto);
+        Documento guardado = anteproyectoUploader.subirDocumento(archivo, anteproyecto);
         return ResponseEntity.ok(guardado);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Documento> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(service.obtenerDocumento(id));
+        return ResponseEntity.ok(documentoService.obtenerDocumento(id));
     }
 
     @GetMapping("/director/{idDirector}")
     public ResponseEntity<List<Documento>> listarPorDirector(@PathVariable String idDirector) {
-        return ResponseEntity.ok(service.listarPorDirector(idDirector));
+        return ResponseEntity.ok(documentoService.listarPorDirector(idDirector));
     }
 }

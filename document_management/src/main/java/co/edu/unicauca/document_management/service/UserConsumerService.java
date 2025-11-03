@@ -14,18 +14,9 @@ public class UserConsumerService {
     @Autowired
     private UserRepository repository;
 
-    @RabbitListener(queues = RabbitConfig.USER_QUEUE)
-    public void receiveMessage(UserDTO dto) {
-        System.out.println("Usuario Recibido "+ dto.getEmail());
-
-        User usuario = new User(
-                dto.getEmail(),
-                dto.getNombre(),
-                dto.getApellidos(),
-                dto.getRol(),
-                dto.getCelular()
-        );
-        repository.save(usuario);
+    @RabbitListener(queues = RabbitConfig.DOCUMENT_USER_QUEUE)
+    public void receiveUser(UserDTO dto) {
+        System.out.println("Usuario recibido en DOCUMENT: " + dto.getEmail());
+        repository.save(new User(dto.getEmail(), dto.getNombre(), dto.getApellidos(), dto.getRol(), dto.getCelular()));
     }
-
 }

@@ -21,10 +21,11 @@ public class SubmissionPublisher {
 
     public void enviarUsuario(User user) {
         try {
-            rabbitTemplate.convertAndSend(RabbitConfig.USER_QUEUE, user);
+            rabbitTemplate.convertAndSend(RabbitConfig.USER_EXCHANGE, "", user);
+
 
             logger.info("[SubmissionPublisher] Usuario enviado a la cola '{}': {}",
-                    RabbitConfig.USER_QUEUE, user.getNombre());
+                    RabbitConfig.USER_EXCHANGE, user.getNombre());
         } catch (Exception e) {
             logger.error("Error enviando mensaje a RabbitMQ: {}", e.getMessage());
         }

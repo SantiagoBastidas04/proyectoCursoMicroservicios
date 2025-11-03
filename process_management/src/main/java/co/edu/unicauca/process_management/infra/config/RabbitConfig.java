@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-    public static final String USER_QUEUE = "userQueue";
-    public static final String DOCUMENT_QUEUE ="DocumentQueue";
+    public static final String PROCESS_USER_QUEUE = "processUserQueue";
+    public static final String DOCUMENT_QUEUE = "DocumentQueue";
 
     @Bean
     public Jackson2JsonMessageConverter jsonConverter() {

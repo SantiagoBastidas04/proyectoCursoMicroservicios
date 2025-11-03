@@ -12,29 +12,24 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-    public static final String USER_QUEUE = "userQueue";
-    public static final String DOCUMENT_QUEUE ="DocumentQueue";
+    public static final String DOCUMENT_USER_QUEUE = "documentUserQueue";
+    public static final String DOCUMENT_QUEUE = "DocumentQueue";
     public static final String NOTIFICATION_QUEUE = "notificationQueue";
 
     @Bean
-    public Queue anteproyectoQueue() {
-        return new Queue(USER_QUEUE, true);
+    public Queue documentoQueue() {
+        return new Queue(DOCUMENT_QUEUE, true);
     }
+
     @Bean
-    public Queue documentoQueue(){return new Queue(DOCUMENT_QUEUE, true);}
-    @Bean
-    public Queue notificationQueue() {return new Queue(NOTIFICATION_QUEUE, true);}
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonConverter());
-        return rabbitTemplate;
+    public Queue notificationQueue() {
+        return new Queue(NOTIFICATION_QUEUE, true);
     }
+
     @Bean
     public Jackson2JsonMessageConverter jsonConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(

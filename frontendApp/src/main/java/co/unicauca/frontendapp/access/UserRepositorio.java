@@ -1,9 +1,17 @@
 package co.unicauca.frontendapp.access;
 
+import co.unicauca.frontendapp.entities.ProjectModel;
 import co.unicauca.frontendapp.entities.User;
+import co.unicauca.frontendapp.entities.enumRol;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.net.http.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepositorio implements IUserRepositorio {
 
@@ -72,6 +80,35 @@ public class UserRepositorio implements IUserRepositorio {
             return null;
         }
     }
+    @Override
+    public List<User> listarPorRol(enumRol rol) {
+        List<User> usuarios = new ArrayList<>();
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE + "/get/" + rol))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+                usuarios = mapper.readValue(res.body(), new TypeReference<List<User>>() {
+                });
+
+            } else {
+                System.err.println("Error al obtener proyectos: " + res.statusCode() + " - " + res.body());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return usuarios; // si falla o el status != 200, devuelve lista vacía
+    }
 
     // ----------------- Helpers -----------------
     private static String enc(String s) {
@@ -99,4 +136,6 @@ public class UserRepositorio implements IUserRepositorio {
     private static String quote(String s) {
         return "\"" + s.replace("\"", "\\\"") + "\"";
     }
+
+    
 }

@@ -115,6 +115,8 @@ public class ProjectService {
             existente.setAtrCodirectorEmail(proyectoActualizado.getAtrCodirectorEmail());
             existente.setAtrStudent1Email(proyectoActualizado.getAtrStudent1Email());
             existente.setAtrStudent2Email(proyectoActualizado.getAtrStudent2Email());
+            existente.setAtrEvaluator1Email(proyectoActualizado.getAtrEvaluator1Email());
+            existente.setAtrEvaluator2Email(proyectoActualizado.getAtrEvaluator2Email());
             existente.setAtrModality(proyectoActualizado.getAtrModality());
             existente.setAtrStatus(proyectoActualizado.getAtrStatus());
             existente.setAtrNumberOfAttempts(proyectoActualizado.getAtrNumberOfAttempts());

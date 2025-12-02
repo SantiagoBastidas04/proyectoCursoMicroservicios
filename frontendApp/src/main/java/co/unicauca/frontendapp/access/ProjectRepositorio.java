@@ -319,6 +319,8 @@ public class ProjectRepositorio implements IProjectRepositorio {
         sb.append(js("atrCodirectorEmail", p.getAtrCodirectorEmail())).append(",");
         sb.append(js("atrStudent1Email", p.getAtrStudent1Email())).append(",");
         sb.append(js("atrStudent2Email", p.getAtrStudent2Email())).append(",");
+        sb.append(js("atrEvaluator1Email", p.getAtrEvaluator1Email())).append(",");
+        sb.append(js("atrEvaluator2Email", p.getAtrEvaluator2Email())).append(",");
         sb.append(js("atrModality", p.getAtrModality() != null ? p.getAtrModality().getName() : null)).append(",");
         sb.append(js("atrCreationDate", p.getAtrCreationDate() != null ? p.getAtrCreationDate().toString() : null)).append(",");
         sb.append(js("atrGeneralObjective", p.getAtrGeneralObjective())).append(",");

@@ -20,7 +20,6 @@ public class ServiceProyecto {
         this.projectRepositorio = projectRepositorio;
     }
     public boolean registrarProyecto(ProjectModel proyecto) {
-        projectRepositorio.avanzarEstado(proyecto);
         return projectRepositorio.registrarProyecto(proyecto);
     }
     public List<ProjectModel> listarPorEmailEstudiante(String emailEstudiante){

@@ -21,6 +21,8 @@ public class ProjectModel implements Serializable{
     private String atrCodirectorEmail;
     private String atrStudent1Email;
     private String atrStudent2Email;
+    private String atrEvaluator1Email;
+    private String atrEvaluator2Email;
     private ModalityEnum atrModality;
     private LocalDate atrCreationDate;
     private String atrGeneralObjective;
@@ -43,6 +45,8 @@ public class ProjectModel implements Serializable{
         this.atrCodirectorEmail = atrCodirectorEmail;
         this.atrStudent1Email = atrStudent1Email;
         this.atrStudent2Email = atrStudent2Email;
+        this.atrEvaluator1Email = "";
+        this.atrEvaluator2Email = "";
         this.atrModality = atrModality;
         this.atrCreationDate = atrCreationDate;
         this.atrGeneralObjective = atrGeneralObjective;
@@ -184,10 +188,25 @@ public class ProjectModel implements Serializable{
         this.atrCreationDate = atrCreationDate;
     }
 
+    public String getAtrEvaluator1Email() {
+        return atrEvaluator1Email;
+    }
+
+    public void setAtrEvaluator1Email(String atrEvaluator1Email) {
+        this.atrEvaluator1Email = atrEvaluator1Email;
+    }
+
+    public String getAtrEvaluator2Email() {
+        return atrEvaluator2Email;
+    }
+
+    public void setAtrEvaluator2Email(String atrEvaluator2Email) {
+        this.atrEvaluator2Email = atrEvaluator2Email;
+    }
+
     @Override
     public String toString() {
-        return "ProjectModel{" + "atrId=" + atrId + ", atrTitle=" + atrTitle + ", atrDirectorEmail=" + atrDirectorEmail + ", atrCodirectorEmail=" + atrCodirectorEmail + ", atrStudent1Email=" + atrStudent1Email + ", atrStudent2Email=" + atrStudent2Email + ", atrModality=" + atrModality + ", atrCreationDate=" + atrCreationDate + ", atrGeneralObjective=" + atrGeneralObjective + ", atrSpecificObjectives=" + atrSpecificObjectives + ", atrStatus=" + atrStatus + ", atrNumberOfAttempts=" + atrNumberOfAttempts + ", atrObservations=" + atrObservations + ", rutaFormatoA=" + rutaFormatoA + ", atrCartaAceptacion=" + atrCartaAceptacion + ", rutaAnteproyecto=" + rutaAnteproyecto + '}';
+        return "ProjectModel{" + "atrId=" + atrId + ", atrTitle=" + atrTitle + ", atrDirectorEmail=" + atrDirectorEmail + ", atrCodirectorEmail=" + atrCodirectorEmail + ", atrStudent1Email=" + atrStudent1Email + ", atrStudent2Email=" + atrStudent2Email + ", atrEvaluator1Email=" + atrEvaluator1Email + ", atrEvaluator2Email=" + atrEvaluator2Email + ", atrModality=" + atrModality + ", atrCreationDate=" + atrCreationDate + ", atrGeneralObjective=" + atrGeneralObjective + ", atrSpecificObjectives=" + atrSpecificObjectives + ", atrStatus=" + atrStatus + ", atrNumberOfAttempts=" + atrNumberOfAttempts + ", atrObservations=" + atrObservations + ", rutaFormatoA=" + rutaFormatoA + ", atrCartaAceptacion=" + atrCartaAceptacion + ", rutaAnteproyecto=" + rutaAnteproyecto + '}';
     }
-    
-    
+   
 }

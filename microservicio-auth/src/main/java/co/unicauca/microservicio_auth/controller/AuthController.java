@@ -1,10 +1,12 @@
 package co.unicauca.microservicio_auth.controller;
 
+import co.unicauca.microservicio_auth.entity.Rol;
 import co.unicauca.microservicio_auth.entity.User;
 import co.unicauca.microservicio_auth.service.ServiceUsers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
@@ -45,5 +47,17 @@ public class AuthController {
                 "message", "Inicio de sesión exitoso",
                 "usuario", usuario
         ));
+    }
+    /**
+     * Lista usuarios segun su rol en el sistema    
+     */
+    @GetMapping("/get/{rol}")
+    public ResponseEntity<List<User>> obtenerUsuarioPorRol(@PathVariable Rol rol) {
+        try {
+            List<User> usuarios = serviceUsers.listarUsuariosPorRol(rol);
+            return ResponseEntity.ok(usuarios);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

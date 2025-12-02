@@ -4,6 +4,8 @@
  */
 package co.unicauca.frontendapp.access;
 import co.unicauca.frontendapp.entities.User;
+import co.unicauca.frontendapp.entities.enumRol;
+import java.util.List;
 
 
 /**
@@ -13,4 +15,5 @@ import co.unicauca.frontendapp.entities.User;
 public interface IUserRepositorio {
     boolean guardar(User usuario);
     User iniciarSesion(String email,String contrasenia);
+    List<User> listarPorRol(enumRol rol);
 }

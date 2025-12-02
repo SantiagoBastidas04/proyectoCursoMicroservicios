@@ -36,6 +36,10 @@ public class ProjectModel  {
     private String atrStudent1Email;
     @Column(name = "ATR_STUDENT2",nullable = true)
     private String atrStudent2Email;
+    @Column(name = "ATR_EVALUATOR1")
+    private String atrEvaluator1Email;
+    @Column(name = "ATR_EVALUATOR2")
+    private String atrEvaluator2Email;
     @Enumerated(EnumType.STRING)
     private ModalityEnum atrModality;
     private LocalDate atrCreationDate;

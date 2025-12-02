@@ -1,11 +1,14 @@
 package co.unicauca.microservicio_auth.service;
 
+import co.unicauca.microservicio_auth.entity.Rol;
 import co.unicauca.microservicio_auth.entity.User;
 import co.unicauca.microservicio_auth.messaging.SubmissionPublisher;
 import co.unicauca.microservicio_auth.repository.UserRepository;
 import co.unicauca.microservicio_auth.utility.EmailValidator;
 import co.unicauca.microservicio_auth.utility.PasswordUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ServiceUsers {
@@ -49,5 +52,8 @@ public class ServiceUsers {
         String contraseniaCifrada = PasswordUtils.cifrarSHA256(contrasenia);
 
         return userRepository.findByEmailAndContrasenia(email, contraseniaCifrada).orElse(null);
+    }
+    public List<User> listarUsuariosPorRol(Rol rol){
+        return userRepository.findByRol(rol);
     }
 }

@@ -5,6 +5,7 @@
 package co.unicauca.frontendapp.service;
 import co.unicauca.frontendapp.access.IUserRepositorio;
 import co.unicauca.frontendapp.entities.User;
+import co.unicauca.frontendapp.entities.enumRol;
 import co.unicauca.frontendapp.observer.AuthObserver;
 import co.unicauca.frontendapp.utility.EmailValidator;
 import co.unicauca.frontendapp.utility.PasswordUtils;
@@ -68,6 +69,10 @@ public class Service {
             return null;
         }
         return repositorio.iniciarSesion(email, contrasenia);
+    }
+    
+    public List<User> listarPorRol(enumRol rol){
+        return repositorio.listarPorRol(rol);
     }
     
     

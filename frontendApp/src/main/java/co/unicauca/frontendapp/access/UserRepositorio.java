@@ -15,7 +15,7 @@ import java.util.List;
 
 public class UserRepositorio implements IUserRepositorio {
 
-    private static final String BASE = "http://localhost:8080/api/auth";
+    private static final String BASE = "http://localhost:8090/api/auth";
     private final HttpClient http = HttpClient.newHttpClient();
 
     @Override

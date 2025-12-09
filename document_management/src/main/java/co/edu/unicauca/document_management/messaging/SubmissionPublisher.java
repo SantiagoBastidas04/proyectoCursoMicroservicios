@@ -64,4 +64,27 @@ public class SubmissionPublisher {
         return notificacion;
     }
 
+    public void notificarAsignacionEvaluadores(Long anteproyectoId, String docente1, String docente2) {
+
+        NotificacionDTO notificacion1 = new NotificacionDTO(
+                "ASIGNACIÓN_EVALUADOR",
+                "Asignación como evaluador de Anteproyecto",
+                "Usted ha sido asignado como evaluador del anteproyecto con ID: " + anteproyectoId,
+                docente1,
+                "jefe.departamento@unicauca.edu.co"
+        );
+
+        NotificacionDTO notificacion2 = new NotificacionDTO(
+                "ASIGNACIÓN_EVALUADOR",
+                "Asignación como evaluador de Anteproyecto",
+                "Usted ha sido asignado como evaluador del anteproyecto con ID: " + anteproyectoId,
+                docente2,
+                "jefe.departamento@unicauca.edu.co"
+        );
+
+        rabbitTemplate.convertAndSend(RabbitConfig.NOTIFICATION_QUEUE, notificacion1);
+        rabbitTemplate.convertAndSend(RabbitConfig.NOTIFICATION_QUEUE, notificacion2);
+
+        logger.info("[SubmissionPublisher] Notificaciones enviadas para evaluadores del anteproyecto {}.", anteproyectoId);
+    }
 }

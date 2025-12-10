@@ -1,0 +1,87 @@
+version: "3.9"
+
+services:
+
+  # ----------------------------
+  # EUREKA SERVICE DISCOVERY
+  # ----------------------------
+  eureka:
+    image: steeltoeoss/eureka-server
+    container_name: eureka_server
+    ports:
+      - "8761:8761"
+    networks:
+      - labnet
+
+  # ----------------------------
+  # RABBITMQ
+  # ----------------------------
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # consola web
+    networks:
+      - labnet
+
+  # ----------------------------
+  # POSTGRES PARA AUTH
+  # ----------------------------
+  auth-db:
+    image: postgres:15
+    container_name: auth_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: authuser
+      POSTGRES_PASSWORD: authpass
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+    networks:
+      - labnet
+
+  # ----------------------------
+  # MICROSERVICIO AUTH
+  # ----------------------------
+  microservicio-auth:
+    build: ./microservicio-auth
+    container_name: ms_auth
+    depends_on:
+      - auth-db
+      - rabbitmq
+      - eureka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/authdb
+      SPRING_DATASOURCE_USERNAME: authuser
+      SPRING_DATASOURCE_PASSWORD: authpass
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_RABBITMQ_HOST: rabbitmq
+    ports:
+      - "8080:8080"
+    networks:
+      - labnet
+
+  # ----------------------------
+  # MICROSERVICIO PROCESS-MANAGEMENT
+  # ----------------------------
+  process-management:
+    build: ./process_management
+    container_name: ms_process
+    depends_on:
+      - rabbitmq
+      - eureka
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    ports:
+      - "8081:8081"
+    networks:
+      - labnet
+
+volumes:
+  auth_data:
+
+networks:
+  labnet:
